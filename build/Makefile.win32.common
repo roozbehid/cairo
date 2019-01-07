@@ -16,8 +16,8 @@ LD := link
 AR := lib
 
 ifeq ($(CFG),debug)
-CFG_CFLAGS := -MDd -Od -Zi
-CFG_LDFLAGS := -DEBUG
+CFG_CFLAGS := -MDd -Od -ZI -Id:\projects\mw\src\include\ 
+CFG_LDFLAGS := -DEBUG:FASTLINK
 else
 CFG_CFLAGS := -MD -O2
 CFG_LDFLAGS :=
@@ -29,28 +29,40 @@ endif
 PIXMAN_CFLAGS := -I$(PIXMAN_PATH)/pixman/
 PIXMAN_LIBS := $(PIXMAN_PATH)/pixman/$(CFG)/pixman-1.lib
 
+ifeq ($(CFG),debug)
+CAIRO_LIBS =  d:\projects\mw\Debug-Dynamic\nanox.lib
+else
 CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+endif
 
 ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
 ifeq ($(LIBPNG_PATH),)
-LIBPNG_PATH := $(top_builddir)/../libpng
+LIBPNG_PATH := $(top_builddir)/../vcpkg/packages/libpng_x86-windows/include/
 endif
 LIBPNG_CFLAGS += -I$(LIBPNG_PATH)/
-CAIRO_LIBS +=  $(LIBPNG_PATH)/libpng.lib
+CAIRO_LIBS +=  $(LIBPNG_PATH)../lib/libpng16.lib
 endif
+
+FT_PATH := $(top_builddir)/../vcpkg/packages/freetype_x86-windows/include/
+LIBFT_CFLAGS += -I$(FT_PATH)/
+CAIRO_LIBS +=  $(FT_PATH)../lib/freetype.lib
+
+FC_PATH := $(top_builddir)/../vcpkg/packages/fontconfig_x86-windows/include/
+LIBFC_CFLAGS += -I$(FC_PATH)/
+CAIRO_LIBS +=  $(FC_PATH)../lib/fontconfig.lib
 
 ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
 else
 ifeq ($(ZLIB_PATH),)
-ZLIB_PATH := $(top_builddir)/../zlib
+ZLIB_PATH := $(top_builddir)/../vcpkg/packages/zlib_x86-windows/include/
 endif
 ZLIB_CFLAGS += -I$(ZLIB_PATH)/
-CAIRO_LIBS += $(ZLIB_PATH)/zdll.lib
+CAIRO_LIBS += $(ZLIB_PATH)../lib/zlib.lib
 endif
 
 DEFAULT_CFLAGS = -nologo $(CFG_CFLAGS)
 DEFAULT_CFLAGS += -I. -I$(top_srcdir) -I$(top_srcdir)/src
-DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
+DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS) $(LIBFT_CFLAGS) $(LIBFC_CFLAGS)
 
 CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
 
@@ -63,11 +75,11 @@ CAIRO_ARFLAGS = $(DEFAULT_ARFLAGS) $(LDFLAGS)
 # Some generic rules
 
 $(CFG)/%.obj: %.c $(top_srcdir)/src/cairo-features.h
-	@mkdir -p $(CFG)/`dirname $<`
+	
 	@$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
 
 $(CFG)/%-static.obj: %.c $(top_srcdir)/src/cairo-features.h
-	@mkdir -p $(CFG)/`dirname $<`
+	
 	@$(CC) $(CAIRO_CFLAGS) -c -DCAIRO_WIN32_STATIC_BUILD=1 -Fo"$@" $<
 
 clean:

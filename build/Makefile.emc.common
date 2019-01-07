@@ -1,0 +1,65 @@
+default: all
+
+#
+# Edit build/Makefile.win32.features to enable features to build
+#
+include $(top_srcdir)/build/Makefile.emc.inform
+include $(top_srcdir)/build/Makefile.emc.features
+include $(top_srcdir)/build/Makefile.emc.features-h
+
+ifeq ($(top_builddir),)
+top_builddir = $(top_srcdir)
+endif
+
+CC := emcc
+LD := emcc
+AR := lib
+
+ifeq ($(CFG),debug)
+CFG_CFLAGS := -Wno-ignored-attributes -Wno-enum-conversion -s BINARYEN_TRAP_MODE=clamp -s ASSERTIONS=2 -Wno-parentheses-equality -DHAVE_STDINT_H -DHAVE_UINT64_T -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_FREETYPE=1 -Id:/projects/mw/src/include/  -Id:/projects/EMS/fontconfig/
+CFG_LDFLAGS := 
+else
+CFG_CFLAGS := -MD -O2
+CFG_LDFLAGS :=
+endif
+
+ifeq ($(PIXMAN_PATH),)
+PIXMAN_PATH := $(top_builddir)/../../pixman
+endif
+PIXMAN_CFLAGS := -I$(PIXMAN_PATH)/pixman/
+#PIXMAN_LIBS := $(PIXMAN_PATH)/pixman/$(CFG)/pixman-1.bc
+
+ifeq ($(CFG),debug)
+#CAIRO_LIBS =  d:\projects\mw\Debug-Dynamic\nanox.lib
+else
+CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+endif
+
+#FC_PATH := $(top_builddir)/../vcpkg/packages/fontconfig_x86-windows/include/
+#LIBFC_CFLAGS += -I$(FC_PATH)/
+#CAIRO_LIBS +=  $(FC_PATH)../lib/fontconfig.lib
+
+DEFAULT_CFLAGS = $(CFG_CFLAGS)
+DEFAULT_CFLAGS += -I. -I$(top_srcdir) -I$(top_srcdir)/src
+DEFAULT_CFLAGS += $(PIXMAN_CFLAGS)
+
+CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
+
+DEFAULT_LDFLAGS = $(CFG_LDFLAGS)
+DEFAULT_ARFLAGS = 
+
+CAIRO_LDFLAGS = $(DEFAULT_LDFLAGS) $(LDFLAGS)
+CAIRO_ARFLAGS = $(DEFAULT_ARFLAGS) $(LDFLAGS)
+
+# Some generic rules
+
+$(CFG)/%.bc: %.c $(top_srcdir)/src/cairo-features.h
+	
+	@$(CC) $(CAIRO_CFLAGS) -c -o "$@" $<
+
+$(CFG)/%-static.bc: %.c $(top_srcdir)/src/cairo-features.h
+	
+	@$(CC) $(CAIRO_CFLAGS) -c -DCAIRO_WIN32_STATIC_BUILD=1 -o "$@" $<
+
+clean:
+	@rm -f $(CFG)/*.bc $(CFG)/*.dll $(CFG)/*.lib $(CFG)/*.pdb $(CFG)/*.ilk || exit 0

@@ -1,0 +1,26 @@
+top_srcdir = ..
+include $(top_srcdir)/build/Makefile.emc.common
+include Makefile.emc.features
+
+SOURCES = $(enabled_cairo_sources)
+
+STATIC_SOURCES = cairo-system.c
+
+OBJECTS = $(patsubst %.c, $(CFG)/%.bc, $(SOURCES))
+OBJECTS_STATIC = $(patsubst %cairo-system.bc, %cairo-system-static.bc, $(OBJECTS))
+
+static: inform $(CFG)/cairo-static.bc
+dynamic: inform $(CFG)/cairo.bc
+
+$(CFG)/libcairo-static.bc: $(OBJECTS)
+	@$(LD) $(CAIRO_LDFLAGS) -o $@ $(CAIRO_LIBS) $(PIXMAN_LIBS) $(OBJECTS)
+
+all: inform $(CFG)/libcairo-static.bc 
+	@echo "Built successfully!"
+	@echo "You should copy the following files to a proper place now:"
+	@echo ""
+	@echo "	cairo-version.h (NOTE: toplevel, not the src/cairo-version.h one!)"
+	@echo "	src/cairo-features.h"
+	@for x in $(enabled_cairo_headers); do echo "	src/$$x"; done
+	@echo "	src/$(CFG)/cairo.dll"
+	@echo "	src/$(CFG)/cairo-static.lib"

@@ -363,16 +363,16 @@ cairo_quartz_font_sources = cairo-quartz-font.c
 cairo_win32_headers = cairo-win32.h
 cairo_win32_private = win32/cairo-win32-private.h
 cairo_win32_sources = \
-	win32/cairo-win32-debug.c \
-	win32/cairo-win32-device.c \
-	win32/cairo-win32-gdi-compositor.c \
-	win32/cairo-win32-system.c \
-	win32/cairo-win32-surface.c \
-	win32/cairo-win32-display-surface.c \
-	win32/cairo-win32-printing-surface.c \
+#	win32/cairo-win32-debug.c \
+#	win32/cairo-win32-device.c \
+#	win32/cairo-win32-gdi-compositor.c \
+#	win32/cairo-win32-system.c \
+#	win32/cairo-win32-surface.c \
+#	win32/cairo-win32-display-surface.c \
+#	win32/cairo-win32-printing-surface.c \
 	$(NULL)
 cairo_win32_font_sources = \
-	win32/cairo-win32-font.c \
+#	win32/cairo-win32-font.c \
 	$(NULL)
 
 cairo_os2_headers = cairo-os2.h
