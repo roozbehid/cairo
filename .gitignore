@@ -35,3 +35,8 @@ stamp-h.in
 *.rej
 *-uninstalled.pc
 .vimrc
+/src/debug
+*.wasm
+*.js
+*.sqlite
+/.vs
