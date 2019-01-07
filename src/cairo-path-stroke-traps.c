@@ -784,7 +784,7 @@ move_to_dashed (void *closure, const cairo_point_t *point)
 }
 
 static cairo_status_t
-line_to (void *closure, const cairo_point_t *point)
+line_to (void *closure, const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     struct stroker *stroker = closure;
     cairo_stroke_face_t start, end;
@@ -818,7 +818,7 @@ line_to (void *closure, const cairo_point_t *point)
  * Dashed lines.  Cap each dash end, join around turns when on
  */
 static cairo_status_t
-line_to_dashed (void *closure, const cairo_point_t *point)
+line_to_dashed (void *closure, const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     struct stroker *stroker = closure;
     double mag, remain, step_length = 0;
@@ -997,11 +997,11 @@ curve_to (void *closure,
     if (stroker->has_bounds &&
 	! _cairo_spline_intersects (&stroker->current_face.point, b, c, d,
 				    &stroker->line_bounds))
-	return line_to (closure, d);
+	return line_to (closure, d, NULL);
 
     if (! _cairo_spline_init (&spline, spline_to, stroker,
 			      &stroker->current_face.point, b, c, d))
-	return line_to (closure, d);
+	return line_to (closure, d, NULL);
 
     compute_face (&stroker->current_face.point, &spline.initial_slope,
 		  stroker, &face);
@@ -1089,7 +1089,7 @@ close_path (void *closure)
     struct stroker *stroker = closure;
     cairo_status_t status;
 
-    status = line_to (stroker, &stroker->first_point);
+    status = line_to (stroker, &stroker->first_point, NULL);
     if (unlikely (status))
 	return status;
 
@@ -1102,7 +1102,7 @@ close_path_dashed (void *closure)
     struct stroker *stroker = closure;
     cairo_status_t status;
 
-    status = line_to_dashed (stroker, &stroker->first_point);
+    status = line_to_dashed (stroker, &stroker->first_point, NULL);
     if (unlikely (status))
 	return status;
 

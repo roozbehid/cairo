@@ -246,7 +246,7 @@ _charstring_move_to (void		    *closure,
 
 static cairo_status_t
 _charstring_line_to (void		    *closure,
-                     const cairo_point_t    *point)
+                     const cairo_point_t    *point, const cairo_slope_t *tangent)
 {
     t1_path_info_t *path_info = (t1_path_info_t *) closure;
     int dx, dy;

@@ -828,7 +828,7 @@ _cairo_path_fixed_interpret (const cairo_path_fixed_t		*path,
 		points += 1;
 		break;
 	    case CAIRO_PATH_OP_LINE_TO:
-		status = (*line_to) (closure, &points[0]);
+		status = (*line_to) (closure, &points[0],NULL);
 		points += 1;
 		break;
 	    case CAIRO_PATH_OP_CURVE_TO:
@@ -871,7 +871,7 @@ _append_move_to (void		 *abstract_closure,
 
 static cairo_status_t
 _append_line_to (void		 *abstract_closure,
-		 const cairo_point_t *point)
+		 const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cairo_path_fixed_append_closure_t	*closure = abstract_closure;
 
@@ -1125,13 +1125,13 @@ _cpf_move_to (void *closure,
 
 static cairo_status_t
 _cpf_line_to (void *closure,
-	      const cairo_point_t *point)
+	      const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cpf_t *cpf = closure;
 
     cpf->current_point = *point;
 
-    return cpf->line_to (cpf->closure, point);
+    return cpf->line_to (cpf->closure, point, NULL);
 }
 
 static cairo_status_t
@@ -1150,7 +1150,7 @@ _cpf_curve_to (void		*closure,
 			      cpf->closure,
 			      p0, p1, p2, p3))
     {
-	return _cpf_line_to (closure, p3);
+	return _cpf_line_to (closure, p3,NULL);
     }
 
     cpf->current_point = *p3;

@@ -170,7 +170,7 @@ _cairo_in_fill_move_to (void *closure,
 
 static cairo_status_t
 _cairo_in_fill_line_to (void *closure,
-			const cairo_point_t *point)
+			const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cairo_in_fill_t *in_fill = closure;
 

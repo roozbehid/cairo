@@ -865,7 +865,7 @@ _cairo_svg_path_move_to (void *closure,
 
 static cairo_status_t
 _cairo_svg_path_line_to (void *closure,
-			 const cairo_point_t *point)
+			 const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     svg_path_info_t *info = closure;
     double x = _cairo_fixed_to_double (point->x);

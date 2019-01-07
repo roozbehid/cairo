@@ -482,7 +482,7 @@ _add_edge (struct reduce *r,
 
 static cairo_status_t
 _reduce_line_to (void *closure,
-		       const cairo_point_t *point)
+		       const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     struct reduce *r = closure;
 
@@ -497,7 +497,7 @@ _reduce_close (void *closure)
 {
     struct reduce *r = closure;
 
-    return _reduce_line_to (r, &r->last_move_to);
+    return _reduce_line_to (r, &r->last_move_to,NULL);
 }
 
 static cairo_status_t

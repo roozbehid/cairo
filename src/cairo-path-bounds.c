@@ -66,7 +66,7 @@ _cairo_path_bounder_move_to (void *closure,
 
 static cairo_status_t
 _cairo_path_bounder_line_to (void *closure,
-			     const cairo_point_t *point)
+			     const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cairo_path_bounder_t *bounder = closure;
 

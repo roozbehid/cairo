@@ -101,19 +101,22 @@ hr = m_pD2DFactory->CreateDCRenderTarget(&props, &device->d2d);
 
 static cairo_bool_t is_win98 (void)
 {
-    OSVERSIONINFO os;
+    return 1;
+/*    OSVERSIONINFO os;
 
     os.dwOSVersionInfoSize = sizeof (os);
     GetVersionEx (&os);
 
     return (VER_PLATFORM_WIN32_WINDOWS == os.dwPlatformId &&
 	    os.dwMajorVersion == 4 &&
-	    os.dwMinorVersion == 10);
+	    os.dwMinorVersion == 10);*/
 }
 
 static void *
 _cairo_win32_device_get_alpha_blend (cairo_win32_device_t *device)
 {
+    return NULL;
+    /*
     void *func = NULL;
 
     if (is_win98 ())
@@ -123,7 +126,7 @@ _cairo_win32_device_get_alpha_blend (cairo_win32_device_t *device)
     if (device->msimg32_dll)
 	func = GetProcAddress (device->msimg32_dll, "AlphaBlend");
 
-    return func;
+    return func;*/
 }
 
 cairo_device_t *

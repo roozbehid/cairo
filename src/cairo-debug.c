@@ -202,7 +202,7 @@ _print_move_to (void *closure,
 
 static cairo_status_t
 _print_line_to (void *closure,
-		const cairo_point_t *point)
+		const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     fprintf (closure,
 	     " %f %f l",

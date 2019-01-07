@@ -996,7 +996,7 @@ typedef cairo_status_t
 
 typedef cairo_status_t
 (cairo_path_fixed_line_to_func_t) (void		 *closure,
-				   const cairo_point_t *point);
+				   const cairo_point_t *point, const cairo_slope_t *tangent);
 
 typedef cairo_status_t
 (cairo_path_fixed_curve_to_func_t) (void	  *closure,

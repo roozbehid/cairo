@@ -447,7 +447,7 @@ _cairo_rectilinear_stroker_move_to (void		*closure,
 
 static cairo_status_t
 _cairo_rectilinear_stroker_line_to (void		*closure,
-				    const cairo_point_t	*b)
+				    const cairo_point_t	*b, const cairo_slope_t *tangent)
 {
     cairo_rectilinear_stroker_t *stroker = closure;
     cairo_point_t *a = &stroker->current_point;
@@ -471,7 +471,7 @@ _cairo_rectilinear_stroker_line_to (void		*closure,
 
 static cairo_status_t
 _cairo_rectilinear_stroker_line_to_dashed (void		*closure,
-					   const cairo_point_t	*point)
+					   const cairo_point_t	*point, const cairo_slope_t *tangent)
 {
     cairo_rectilinear_stroker_t *stroker = closure;
     const cairo_point_t *a = &stroker->current_point;
@@ -586,10 +586,10 @@ _cairo_rectilinear_stroker_close_path (void *closure)
 
     if (stroker->dash.dashed) {
 	status = _cairo_rectilinear_stroker_line_to_dashed (stroker,
-							    &stroker->first_point);
+							    &stroker->first_point, NULL);
     } else {
 	status = _cairo_rectilinear_stroker_line_to (stroker,
-						     &stroker->first_point);
+						     &stroker->first_point, NULL);
     }
     if (unlikely (status))
 	return status;

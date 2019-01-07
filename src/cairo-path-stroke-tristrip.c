@@ -834,7 +834,7 @@ move_to (void *closure,
 
 static cairo_status_t
 line_to (void *closure,
-	 const cairo_point_t *point)
+	 const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     struct stroker *stroker = closure;
     cairo_stroke_face_t start;
@@ -971,12 +971,12 @@ curve_to (void *closure,
     if (stroker->has_limits) {
 	if (! _cairo_spline_intersects (&stroker->current_face.point, b, c, d,
 					&stroker->limit))
-	    return line_to (closure, d);
+	    return line_to (closure, d, NULL);
     }
 
     if (! _cairo_spline_init (&spline, spline_to, stroker,
 			      &stroker->current_face.point, b, c, d))
-	return line_to (closure, d);
+	return line_to (closure, d, NULL);
 
     compute_face (&stroker->current_face.point, &spline.initial_slope,
 		  stroker, &face);
@@ -1009,7 +1009,7 @@ close_path (void *closure)
     struct stroker *stroker = closure;
     cairo_status_t status;
 
-    status = line_to (stroker, &stroker->first_point);
+    status = line_to (stroker, &stroker->first_point, NULL);
     if (unlikely (status))
 	return status;
 

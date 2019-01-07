@@ -103,6 +103,8 @@
 cairo_status_t
 _cairo_win32_print_gdi_error (const char *context)
 {
+    fprintf (stderr, "%s: Unknown GDI error", context);
+    /*
     void *lpMsgBuf;
     DWORD last_error = GetLastError ();
 
@@ -120,7 +122,7 @@ _cairo_win32_print_gdi_error (const char *context)
 	LocalFree (lpMsgBuf);
     }
 
-    fflush (stderr);
+    fflush (stderr);*/
 
     return _cairo_error (CAIRO_STATUS_WIN32_GDI_ERROR);
 }

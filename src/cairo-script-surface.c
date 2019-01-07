@@ -1776,7 +1776,7 @@ _path_move_to (void *closure,
 
 static cairo_status_t
 _path_line_to (void *closure,
-	       const cairo_point_t *point)
+	       const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     _cairo_output_stream_printf (closure,
 				 " %f %f l",

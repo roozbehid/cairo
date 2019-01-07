@@ -2112,12 +2112,13 @@ FAIL:
  *
  * Since: 1.0
  **/
+ #if CAIRO_HAS_WIN32_FONT
 cairo_font_face_t *
 cairo_win32_font_face_create_for_logfontw (LOGFONTW *logfont)
 {
     return cairo_win32_font_face_create_for_logfontw_hfont (logfont, NULL);
 }
-
+#endif
 /**
  * cairo_win32_font_face_create_for_hfont:
  * @font: An #HFONT structure specifying the font to use.
@@ -2233,6 +2234,7 @@ cairo_win32_scaled_font_select_font (cairo_scaled_font_t *scaled_font,
  *
  * Since: 1.0
  **/
+ #if CAIRO_HAS_WIN32_FONT
 void
 cairo_win32_scaled_font_done_font (cairo_scaled_font_t *scaled_font)
 {
@@ -2240,6 +2242,7 @@ cairo_win32_scaled_font_done_font (cairo_scaled_font_t *scaled_font)
 	_cairo_error_throw (CAIRO_STATUS_FONT_TYPE_MISMATCH);
     }
 }
+#endif
 
 /**
  * cairo_win32_scaled_font_get_metrics_factor:

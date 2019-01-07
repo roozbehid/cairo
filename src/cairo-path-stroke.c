@@ -947,7 +947,7 @@ _cairo_stroker_move_to (void *closure,
 
 static cairo_status_t
 _cairo_stroker_line_to (void *closure,
-			const cairo_point_t *point)
+			const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cairo_stroker_t *stroker = closure;
     cairo_stroke_face_t start, end;
@@ -1085,7 +1085,7 @@ _cairo_stroker_spline_to (void *closure,
  */
 static cairo_status_t
 _cairo_stroker_line_to_dashed (void *closure,
-			       const cairo_point_t *p2)
+			       const cairo_point_t *p2, const cairo_slope_t *tangent)
 {
     cairo_stroker_t *stroker = closure;
     double mag, remain, step_length = 0;
@@ -1331,9 +1331,9 @@ _cairo_stroker_close_path (void *closure)
     cairo_status_t status;
 
     if (stroker->dash.dashed)
-	status = _cairo_stroker_line_to_dashed (stroker, &stroker->first_point);
+	status = _cairo_stroker_line_to_dashed (stroker, &stroker->first_point, NULL);
     else
-	status = _cairo_stroker_line_to (stroker, &stroker->first_point);
+	status = _cairo_stroker_line_to (stroker, &stroker->first_point, NULL);
     if (unlikely (status))
 	return status;
 

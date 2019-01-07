@@ -71,7 +71,7 @@ _cpc_move_to (void *closure,
 
 static cairo_status_t
 _cpc_line_to (void *closure,
-	      const cairo_point_t *point)
+	      const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cpc_t *cpc = closure;
 
@@ -169,7 +169,7 @@ _cpp_move_to (void *closure,
 
 static cairo_status_t
 _cpp_line_to (void *closure,
-	      const cairo_point_t *point)
+	      const cairo_point_t *point, const cairo_slope_t *tangent)
 {
     cpp_t *cpp = closure;
     cairo_path_data_t *data = cpp->data;
