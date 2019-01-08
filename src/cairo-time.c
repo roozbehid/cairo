@@ -98,7 +98,7 @@ _cairo_time_1s (void)
 {
     LARGE_INTEGER freq;
 
-    ////QueryPerformanceFrequency (&freq);
+    QueryPerformanceFrequency (&freq);
 
     return freq.QuadPart;
 }
@@ -127,7 +127,7 @@ _cairo_time_get (void)
 {
     LARGE_INTEGER t;
 
-    ////QueryPerformanceCounter (&t);
+    QueryPerformanceCounter (&t);
 
     return _cairo_time_from_large_integer(t);
 }
